@@ -14,7 +14,7 @@
           </stats-card>
         </b-col>
         <b-col xl="3" md="6">
-          <stats-card title="Биржи России"
+          <stats-card title="Биржи Россиии"
                       class="mb-2">
           </stats-card>
 
