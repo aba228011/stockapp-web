@@ -45,6 +45,7 @@
                   table-variant="white"
                   hover
                   style="width: 70%;"
+                  @row-clicked="chooseStock"
                 >
                 </b-table>
               </b-card>
@@ -54,21 +55,79 @@
                 class="ml-5"
                 style="width: 30%"
               >
-<!--                <b-card-text>-->
-<!--                  Some quick example text to build on the card title and make up the bulk of the card's content.-->
-<!--                </b-card-text>-->
 
                 <div style="display: flex; justify-content: space-around">
                   <label class="switch">
                     <input type="checkbox" v-model="isSell">
                     <span class="slider"></span>
                   </label>
-                  <label>{{isSell ? "Продать" : "Купить"}}</label>
+                  <label>{{ isSell ? "Продать" : "Купить" }}</label>
                 </div>
 
-                <b-button href="#" variant="primary">Go somewhere</b-button>
+                <b-form-group
+                  label="Сумма сделки: "
+                  label-for="sum-of-deal"
+                  label-cols-sm="6"
+                >
+                  <b-form-input id="sum-of-deal" type="number" v-model="sumOfDeal"></b-form-input>
+                </b-form-group>
+
+                <b-form-group
+                  label="Мультипликатор: "
+                  label-for="id-multiplier"
+                  label-cols-sm="6"
+                >
+                  <b-form-input id="id-multiplier"
+                                type="number"
+                                v-model="multiplier"
+                                style="width: 100px"
+                  ></b-form-input>
+                  = {{ sumOfDeal * multiplier }}
+                </b-form-group>
+                <details>
+                  <summary>Take Profit и Stop Loss</summary>
+
+                  <div style="display:flex; justify-content: space-between; margin-top: 10px">
+                    <b-form-checkbox
+                      v-model="takeStatus"
+                    >
+                      Take Profit
+                    </b-form-checkbox>
+
+                    <div v-show="takeStatus">+{{ ((takeProfitValue / sumOfDeal) * 100).toFixed(2)}}%</div>
+                    <b-form-input type="number"
+                                  v-model="takeProfitValue"
+                                  :disabled="!takeStatus"
+                                  style="width: 100px"
+                    ></b-form-input>
+                  </div>
+                  <div style="display:flex; justify-content: space-between; margin-top: 10px">
+                    <b-form-checkbox
+                      v-model="stopStatus"
+                    >
+                      Stop Loss
+                    </b-form-checkbox>
+
+                    <div v-show="stopStatus">-{{ ((stopLessValue / sumOfDeal) * 100).toFixed(2)}}%</div>
+                    <b-form-input type="number"
+                                  v-model="stopLessValue"
+                                  :disabled="!stopStatus"
+                                  style="width: 100px"
+                    ></b-form-input>
+                  </div>
+                </details>
+
+
+                <b-button variant="primary" class="mt-4">{{ isSell ? "Продать" : "Купить" }}</b-button>
               </b-card>
             </div>
+            <b-card>
+              <div style="display: flex; justify-content: space-around">
+                <b-form-select v-model="selectedInterval" :options="intervalOptions" size="sm" class="mt-3" style="width: 200px;"></b-form-select>
+                <div class="mt-3">Интервал: <strong>{{ selectedInterval }}</strong></div>
+              </div>
+              <Plotly :data="plotData" :layout="layout" :display-mode-bar="false"></Plotly>
+            </b-card>
           </b-tab>
           <b-tab title="Европа"><p>I'm the second tab</p></b-tab>
           <b-tab title="Россия"><p>I'm a disabled tab!</p></b-tab>
@@ -162,6 +221,7 @@ import StatsCard from '@/components/Cards/StatsCard';
 // Tables
 import SocialTrafficTable from './Dashboard/SocialTrafficTable';
 import PageVisitsTable from './Dashboard/PageVisitsTable';
+import { Plotly } from 'vue-plotly';
 
 export default {
   components: {
@@ -170,15 +230,36 @@ export default {
     BaseProgress,
     StatsCard,
     PageVisitsTable,
-    SocialTrafficTable
+    SocialTrafficTable,
+    Plotly
   },
   data() {
     return {
+      selectedStock: null,
+      stockChartXValues: [],
+      stockChartYValues: [],
+      plotData: [],
+      layout: null,
+      intervalOptions: [
+        { value: null, text: 'Выберите интервал' },
+        { value: '1min', text: '1 минутный интервал' },
+        { value: '5min', text: '5 минутный интервал' },
+        { value: '15min', text: '15 минутный интервал' },
+        { value: '30min', text: '30 минутный интервал' },
+        { value: '60min', text: '60 минутный интервал' },
+      ],
+      selectedInterval: null,
+      sumOfDeal: 1000,
+      multiplier: 10,
+      takeProfitValue: 300,
+      stopLessValue: 200,
       isSell: false,
+      takeStatus: false,
+      stopStatus: false,
       sortBy: 'age',
       sortDesc: false,
       fields: [
-        {key: 'delete', label: 'Удалить', sortable: true},
+        {key: 'action', label: '', sortable: false},
         {key: 'ticker', label: 'Тикер', sortable: true},
         {key: 'name_ru', label: 'Название', sortable: true},
         {key: 'buy', label: 'Покупка', sortable: false},
@@ -191,7 +272,33 @@ export default {
       items: [
         {
           age: 40,
-          delete: '',
+          action: '',
+          ticker: 'AAPL',
+          name_ru: 'Apple',
+          buy: 163,
+          sell: 181,
+          deal: 179.58,
+          time: '13:38:58',
+          coefDay: 5.21,
+          procDay: '2%',
+          _rowVariant: 'white'
+        },
+        {
+          age: 40,
+          action: '',
+          ticker: 'MSFT',
+          name_ru: 'Microsoft',
+          buy: 300.43,
+          sell: 312.14,
+          deal: 305.56,
+          time: '13:38:58',
+          coefDay: 4.21,
+          procDay: '1.76%',
+          _rowVariant: 'white'
+        },
+        {
+          age: 40,
+          action: '',
           ticker: 'KSPI.EU',
           name_ru: 'Kaspi.KZ JSC',
           buy: 47.00,
@@ -204,7 +311,7 @@ export default {
         },
         {
           age: 40,
-          delete: '',
+          action: '',
           ticker: 'KSPI.EU',
           name_ru: 'Kaspi.KZ JSC',
           buy: 47.00,
@@ -217,7 +324,7 @@ export default {
         },
         {
           age: 40,
-          delete: '',
+          action: '',
           ticker: 'KSPI.EU',
           name_ru: 'Kaspi.KZ JSC',
           buy: 47.00,
@@ -230,7 +337,7 @@ export default {
         },
         {
           age: 40,
-          delete: '',
+          action: '',
           ticker: 'KSPI.EU',
           name_ru: 'Kaspi.KZ JSC',
           buy: 47.00,
@@ -243,7 +350,7 @@ export default {
         },
         {
           age: 40,
-          delete: '',
+          action: '',
           ticker: 'KSPI.EU',
           name_ru: 'Kaspi.KZ JSC',
           buy: 47.00,
@@ -256,7 +363,7 @@ export default {
         },
         {
           age: 40,
-          delete: '',
+          action: '',
           ticker: 'KSPI.EU',
           name_ru: 'Kaspi.KZ JSC',
           buy: 47.00,
@@ -269,7 +376,7 @@ export default {
         },
         {
           age: 40,
-          delete: '',
+          action: '',
           ticker: 'KSPI.EU',
           name_ru: 'Kaspi.KZ JSC',
           buy: 47.00,
@@ -282,7 +389,7 @@ export default {
         },
         {
           age: 40,
-          delete: '',
+          action: '',
           ticker: 'KSPI.EU',
           name_ru: 'Kaspi.KZ JSC',
           buy: 47.00,
@@ -295,7 +402,7 @@ export default {
         },
         {
           age: 40,
-          delete: '',
+          action: '',
           ticker: 'KSPI.EU',
           name_ru: 'Kaspi.KZ JSC',
           buy: 47.00,
@@ -308,7 +415,7 @@ export default {
         },
         {
           age: 40,
-          delete: '',
+          action: '',
           ticker: 'KSPI.EU',
           name_ru: 'Kaspi.KZ JSC',
           buy: 47.00,
@@ -321,7 +428,7 @@ export default {
         },
         {
           age: 40,
-          delete: '',
+          action: '',
           ticker: 'KSPI.EU',
           name_ru: 'Kaspi.KZ JSC',
           buy: 47.00,
@@ -334,33 +441,7 @@ export default {
         },
         {
           age: 40,
-          delete: '',
-          ticker: 'KSPI.EU',
-          name_ru: 'Kaspi.KZ JSC',
-          buy: 47.00,
-          sell: 60.00,
-          deal: 50.50,
-          time: '13:38:58',
-          coefDay: 3.10,
-          procDay: '6.54%',
-          _rowVariant: 'white'
-        },
-        {
-          age: 40,
-          delete: '',
-          ticker: 'KSPI.EU',
-          name_ru: 'Kaspi.KZ JSC',
-          buy: 47.00,
-          sell: 60.00,
-          deal: 50.50,
-          time: '13:38:58',
-          coefDay: 3.10,
-          procDay: '6.54%',
-          _rowVariant: 'white'
-        },
-        {
-          age: 40,
-          delete: '',
+          action: '',
           ticker: 'KSPI.EU',
           name_ru: 'Kaspi.KZ JSC',
           buy: 47.00,
@@ -402,6 +483,17 @@ export default {
     };
   },
   methods: {
+    chooseStock(record, index) {
+      // 'record' will be the row data from items
+      // `index` will be the visible row number (available in the v-model 'shownItems')
+      console.log(record); // This will be the item data for the row
+      if (record && record.hasOwnProperty('ticker')) {
+        this.selectedStock =  {
+          ticker: record.ticker,
+          name_ru: record.name_ru
+        }
+      }
+    },
     initBigChart(index) {
       let chartData = {
         datasets: [
@@ -414,10 +506,57 @@ export default {
       };
       this.bigLineChart.chartData = chartData;
       this.bigLineChart.activeIndex = index;
+    },
+    async fetchStock(interval) {
+      this.layout = {
+        title: this.selectedStock.name_ru
+      };
+      const pointerToThis = this;
+      console.log(pointerToThis);
+      const API_KEY = 'Z0IIDOBOZUY3550O';
+      // let StockSymbol = 'FB';
+      // let API_Call = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${StockSymbol}&outputsize=compact&apikey=${API_KEY}`;
+      let API_Call = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${this.selectedStock.ticker}&interval=${interval}&apikey=${API_KEY}`;
+      let stockChartXValuesFunction = [];
+      let stockChartYValuesFunction = [];
+
+      await fetch(API_Call)
+        .then(
+          function (response) {
+            return response.json();
+          }
+        )
+        .then(
+          function (data) {
+            console.log(data);
+
+            for (const key in data[`Time Series (${interval})`]) {
+              stockChartXValuesFunction.push(key);
+              stockChartYValuesFunction.push(data[`Time Series (${interval})`][key]['1. open']);
+            }
+
+            // console.log(stockChartXValuesFunction);
+            pointerToThis.stockChartXValues = stockChartXValuesFunction;
+            pointerToThis.stockChartYValues = stockChartYValuesFunction;
+          }
+        )
     }
   },
   mounted() {
     this.initBigChart(0);
+
+  },
+  watch: {
+    async selectedInterval(newValue) {
+      await this.fetchStock(newValue);
+      console.log(this.stockChartXValues)
+      console.log(this.stockChartYValues)
+      this.plotData = [{
+        x: this.stockChartXValues,
+        y: this.stockChartYValues,
+        type: 'scatter'
+      }]
+    }
   }
 };
 </script>
@@ -426,6 +565,7 @@ export default {
   padding-left: 0px;
   padding-right: 0px;
 }
+
 .switch {
   position: relative;
   display: inline-block;
