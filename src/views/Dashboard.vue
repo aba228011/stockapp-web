@@ -47,6 +47,22 @@
                   style="width: 70%;"
                   @row-clicked="chooseStock"
                 >
+                  <template #cell(coefDay) = data>
+                    <div v-if="parseFloat(data.item.coefDay) >= 1" style="color: green">
+                      {{data.item.coefDay}}
+                    </div>
+                    <div v-else style="color: red">
+                      {{data.item.coefDay}}
+                    </div>
+                  </template>
+                  <template #cell(procDay) = data>
+                    <div v-if="parseFloat(data.item.coefDay) >= 1" style="color: green">
+                      + {{data.item.procDay}}%
+                    </div>
+                    <div v-else style="color: red">
+                      - {{data.item.procDay}}%
+                    </div>
+                  </template>
                 </b-table>
               </b-card>
               <b-card
@@ -348,8 +364,8 @@ export default {
           sell: 181,
           deal: 179.58,
           time: '13:38:58',
-          coefDay: 5.21,
-          procDay: '2%',
+          coefDay: 1.21,
+          procDay: 0.52,
           _rowVariant: 'white'
         },
         {
@@ -361,8 +377,8 @@ export default {
           sell: 312.14,
           deal: 305.56,
           time: '13:38:58',
-          coefDay: 4.21,
-          procDay: '1.76%',
+          coefDay: 0.21,
+          procDay: 1.76,
           _rowVariant: 'white'
         },
         {
@@ -374,8 +390,21 @@ export default {
           sell: 60.00,
           deal: 50.50,
           time: '13:38:58',
+          coefDay: 0.10,
+          procDay: 2.54,
+          _rowVariant: 'white'
+        },
+        {
+          age: 40,
+          action: '',
+          ticker: 'HSBK',
+          name_ru: 'Halyq Bank',
+          buy: 147.00,
+          sell: 160.00,
+          deal: 153.50,
+          time: '13:38:58',
           coefDay: 3.10,
-          procDay: '6.54%',
+          procDay: 5.52,
           _rowVariant: 'white'
         },
         {
@@ -387,138 +416,8 @@ export default {
           sell: 60.00,
           deal: 50.50,
           time: '13:38:58',
-          coefDay: 3.10,
-          procDay: '6.54%',
-          _rowVariant: 'white'
-        },
-        {
-          age: 40,
-          action: '',
-          ticker: 'KSPI.EU',
-          name_ru: 'Kaspi.KZ JSC',
-          buy: 47.00,
-          sell: 60.00,
-          deal: 50.50,
-          time: '13:38:58',
-          coefDay: 3.10,
-          procDay: '6.54%',
-          _rowVariant: 'white'
-        },
-        {
-          age: 40,
-          action: '',
-          ticker: 'KSPI.EU',
-          name_ru: 'Kaspi.KZ JSC',
-          buy: 47.00,
-          sell: 60.00,
-          deal: 50.50,
-          time: '13:38:58',
-          coefDay: 3.10,
-          procDay: '6.54%',
-          _rowVariant: 'white'
-        },
-        {
-          age: 40,
-          action: '',
-          ticker: 'KSPI.EU',
-          name_ru: 'Kaspi.KZ JSC',
-          buy: 47.00,
-          sell: 60.00,
-          deal: 50.50,
-          time: '13:38:58',
-          coefDay: 3.10,
-          procDay: '6.54%',
-          _rowVariant: 'white'
-        },
-        {
-          age: 40,
-          action: '',
-          ticker: 'KSPI.EU',
-          name_ru: 'Kaspi.KZ JSC',
-          buy: 47.00,
-          sell: 60.00,
-          deal: 50.50,
-          time: '13:38:58',
-          coefDay: 3.10,
-          procDay: '6.54%',
-          _rowVariant: 'white'
-        },
-        {
-          age: 40,
-          action: '',
-          ticker: 'KSPI.EU',
-          name_ru: 'Kaspi.KZ JSC',
-          buy: 47.00,
-          sell: 60.00,
-          deal: 50.50,
-          time: '13:38:58',
-          coefDay: 3.10,
-          procDay: '6.54%',
-          _rowVariant: 'white'
-        },
-        {
-          age: 40,
-          action: '',
-          ticker: 'KSPI.EU',
-          name_ru: 'Kaspi.KZ JSC',
-          buy: 47.00,
-          sell: 60.00,
-          deal: 50.50,
-          time: '13:38:58',
-          coefDay: 3.10,
-          procDay: '6.54%',
-          _rowVariant: 'white'
-        },
-        {
-          age: 40,
-          action: '',
-          ticker: 'KSPI.EU',
-          name_ru: 'Kaspi.KZ JSC',
-          buy: 47.00,
-          sell: 60.00,
-          deal: 50.50,
-          time: '13:38:58',
-          coefDay: 3.10,
-          procDay: '6.54%',
-          _rowVariant: 'white'
-        },
-        {
-          age: 40,
-          action: '',
-          ticker: 'KSPI.EU',
-          name_ru: 'Kaspi.KZ JSC',
-          buy: 47.00,
-          sell: 60.00,
-          deal: 50.50,
-          time: '13:38:58',
-          coefDay: 3.10,
-          procDay: '6.54%',
-          _rowVariant: 'white'
-        },
-        {
-          age: 40,
-          action: '',
-          ticker: 'KSPI.EU',
-          name_ru: 'Kaspi.KZ JSC',
-          buy: 47.00,
-          sell: 60.00,
-          deal: 50.50,
-          time: '13:38:58',
-          coefDay: 3.10,
-          procDay: '6.54%',
-          _rowVariant: 'white'
-        },
-        {
-          age: 40,
-          action: '',
-          ticker: 'KSPI.EU',
-          name_ru: 'Kaspi.KZ JSC',
-          buy: 47.00,
-          sell: 60.00,
-          deal: 50.50,
-          time: '13:38:58',
-          coefDay: 3.10,
-          procDay: '6.54%',
+          coefDay: 0.67,
+          procDay: 4.54,
           _rowVariant: 'white'
         }
       ],
