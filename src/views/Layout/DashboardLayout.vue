@@ -8,10 +8,9 @@
           icon: 'ni ni-chart-bar-32'
         }">
           <sidebar-item :link="{
-                name: 'Начать торговать',
-                path: '/dashboard',
-                icon: 'ni ni-tv-2 text-primary',
-              }"></sidebar-item>
+            name: 'Начать торговать',
+            path: '/start-trading'
+          }"></sidebar-item>
           <sidebar-item :link="{
                 name: 'Фондовый рынок',
                 path: '/dashboard',

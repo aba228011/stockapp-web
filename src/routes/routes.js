@@ -36,6 +36,16 @@ const routes = [
         path: '/tables',
         name: 'tables',
         component: () => import(/* webpackChunkName: "demo" */ '../views/RegularTables.vue')
+      },
+      {
+        path: '/rate',
+        name: 'rate',
+        component: () => import(/* webpackChunkName: "demo" */ '../views/Rate.vue')
+      },
+      {
+        path: '/start-trading',
+        name: 'startTrading',
+        component: () => import(/* webpackChunkName: "demo" */ '../views/StartTrading.vue')
       }
     ]
   },

@@ -81,7 +81,8 @@
                                 type="number"
                                 v-model="multiplier"
                                 style="width: 100px"
-                  ></b-form-input>
+                  >
+                  </b-form-input>
                   = {{ sumOfDeal * multiplier }}
                 </b-form-group>
                 <details>

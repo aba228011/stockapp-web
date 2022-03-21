@@ -50,7 +50,7 @@
                     <b-img alt="Image placeholder" rounded="circle" src="img/theme/team-4.jpg" />
                   </span>
             <b-media-body class="ml-2 d-none d-lg-block">
-              <span class="mb-0 text-sm  font-weight-bold">John Snow</span>
+              <span class="mb-0 text-sm  font-weight-bold">admin</span>
             </b-media-body>
           </b-media>
         </b-dropdown-item>
