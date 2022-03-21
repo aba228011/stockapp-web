@@ -5,23 +5,23 @@
       <b-row>
         <b-col xl="3" md="6">
           <stats-card title="Биржи США"
-                      class="mb-2">
+                      class="mb-2" time-zone="NewYork">
           </stats-card>
         </b-col>
         <b-col xl="3" md="6">
           <stats-card title="Биржи Европы"
-                      class="mb-2">
+                      class="mb-2" time-zone="Berlin">
           </stats-card>
         </b-col>
         <b-col xl="3" md="6">
           <stats-card title="Биржи Россиии"
-                      class="mb-2">
+                      class="mb-2" time-zone="Moscow">
           </stats-card>
 
         </b-col>
         <b-col xl="3" md="6">
           <stats-card title="Биржи Казахстана"
-                      class="mb-2">
+                      class="mb-2" time-zone="Astana">
           </stats-card>
         </b-col>
       </b-row>
@@ -72,18 +72,35 @@
                   <b-form-input id="sum-of-deal" type="number" v-model="sumOfDeal"></b-form-input>
                 </b-form-group>
 
-                <b-form-group
-                  label="Мультипликатор: "
-                  label-for="id-multiplier"
-                  label-cols-sm="6"
-                >
-                  <b-form-input id="id-multiplier"
-                                type="number"
-                                v-model="multiplier"
-                                style="width: 100px"
-                  ></b-form-input>
-                  = {{ sumOfDeal * multiplier }}
-                </b-form-group>
+                <!--                <b-form-group-->
+                <!--                  label="Мультипликатор: "-->
+                <!--                  label-cols-sm="6"-->
+                <!--                >-->
+                <!--                  <b-form-input-->
+                <!--                                type="number"-->
+                <!--                                v-model="multiplier"-->
+                <!--                                style="width: 100px"-->
+                <!--                  ></b-form-input>-->
+                <!--                  = {{ sumOfDeal * multiplier }}-->
+                <!--                </b-form-group>-->
+
+                <div style="display:flex; justify-content: space-between; margin-top: 10px">
+                  <div>Мультипликатор:</div>
+                  <div style="width: 50%; padding-left: 5px; display:flex; justify-content: space-between">
+                    <b-form-input
+                      type="number"
+                      v-model="multiplier"
+                      style="width: 100px;"
+                    ></b-form-input>
+                    <div>
+                      =
+                    </div>
+                    <div>
+                      {{ sumOfDeal * multiplier }}
+                    </div>
+                  </div>
+                </div>
+
                 <details>
                   <summary>Take Profit и Stop Loss</summary>
 
@@ -94,7 +111,7 @@
                       Take Profit
                     </b-form-checkbox>
 
-                    <div v-show="takeStatus">+{{ ((takeProfitValue / sumOfDeal) * 100).toFixed(2)}}%</div>
+                    <div v-show="takeStatus">+{{ ((takeProfitValue / sumOfDeal) * 100).toFixed(2) }}%</div>
                     <b-form-input type="number"
                                   v-model="takeProfitValue"
                                   :disabled="!takeStatus"
@@ -108,7 +125,7 @@
                       Stop Loss
                     </b-form-checkbox>
 
-                    <div v-show="stopStatus">-{{ ((stopLessValue / sumOfDeal) * 100).toFixed(2)}}%</div>
+                    <div v-show="stopStatus">-{{ ((stopLessValue / sumOfDeal) * 100).toFixed(2) }}%</div>
                     <b-form-input type="number"
                                   v-model="stopLessValue"
                                   :disabled="!stopStatus"
@@ -123,7 +140,8 @@
             </div>
             <b-card>
               <div style="display: flex; justify-content: space-around">
-                <b-form-select v-model="selectedInterval" :options="intervalOptions" size="sm" class="mt-3" style="width: 200px;"></b-form-select>
+                <b-form-select v-model="selectedInterval" :options="intervalOptions" size="sm" class="mt-3"
+                               style="width: 200px;"></b-form-select>
                 <div class="mt-3">Интервал: <strong>{{ selectedInterval }}</strong></div>
               </div>
               <Plotly :data="plotData" :layout="layout" :display-mode-bar="false"></Plotly>
@@ -133,6 +151,57 @@
           <b-tab title="Россия"><p>I'm a disabled tab!</p></b-tab>
           <b-tab title="Казахстан"><p>I'm a disabled tab!</p></b-tab>
         </b-tabs>
+      </b-row>
+
+      <b-row>
+        <h1 style="margin: 10px">Новости</h1>
+
+        <b-card-group deck>
+          <b-card header-bg-variant="secondary" bg-variant="dark" text-variant="white"
+                  class="text-center">
+            <template #header>
+              <b-link href="#" style="font-size: 25px; color: black">
+                Рынки	&gt;
+              </b-link>
+            </template>
+            <div style="position:relative; height: 100%; overflow-y:scroll;">
+              <div style="margin-top: 10px;" v-for="n in newsList" :key="n.id">
+                <b-link href="#">{{n.title}}</b-link>
+                <div style="margin-top: 10px">{{n.timeNews}}</div>
+              </div>
+            </div>
+          </b-card>
+
+          <b-card header-bg-variant="secondary" bg-variant="dark" text-variant="white"
+                  class="text-center">
+            <template #header>
+              <b-link href="#" style="font-size: 25px; color: black">
+                Компании &gt;
+              </b-link>
+            </template>
+            <div style="position:relative; height: 100%; overflow-y:scroll;">
+              <div style="margin-top: 10px;" v-for="n in newsList" :key="n.id">
+                <b-link href="#">{{n.title}}</b-link>
+                <div style="margin-top: 10px">{{n.timeNews}}</div>
+              </div>
+            </div>
+          </b-card>
+
+          <b-card header-bg-variant="secondary" bg-variant="dark" text-variant="white"
+                  class="text-center">
+            <template #header>
+              <b-link href="#" style="font-size: 25px; color: black">
+                Биржа	&gt;
+              </b-link>
+            </template>
+            <div style="position:relative; height: 100%; overflow-y:scroll;">
+              <div style="margin-top: 10px;" v-for="n in newsList" :key="n.id">
+                <b-link href="#">{{n.title}}</b-link>
+                <div style="margin-top: 10px">{{n.timeNews}}</div>
+              </div>
+            </div>
+          </b-card>
+        </b-card-group>
       </b-row>
 
       <b-row>
@@ -221,7 +290,7 @@ import StatsCard from '@/components/Cards/StatsCard';
 // Tables
 import SocialTrafficTable from './Dashboard/SocialTrafficTable';
 import PageVisitsTable from './Dashboard/PageVisitsTable';
-import { Plotly } from 'vue-plotly';
+import {Plotly} from 'vue-plotly';
 
 export default {
   components: {
@@ -241,12 +310,12 @@ export default {
       plotData: [],
       layout: null,
       intervalOptions: [
-        { value: null, text: 'Выберите интервал' },
-        { value: '1min', text: '1 минутный интервал' },
-        { value: '5min', text: '5 минутный интервал' },
-        { value: '15min', text: '15 минутный интервал' },
-        { value: '30min', text: '30 минутный интервал' },
-        { value: '60min', text: '60 минутный интервал' },
+        {value: null, text: 'Выберите интервал'},
+        {value: '1min', text: '1 минутный интервал'},
+        {value: '5min', text: '5 минутный интервал'},
+        {value: '15min', text: '15 минутный интервал'},
+        {value: '30min', text: '30 минутный интервал'},
+        {value: '60min', text: '60 минутный интервал'},
       ],
       selectedInterval: null,
       sumOfDeal: 1000,
@@ -453,6 +522,42 @@ export default {
           _rowVariant: 'white'
         }
       ],
+      newsList: [
+        {
+          id: 1,
+          title: '﻿18 марта значение Индекса KASE выросло на 0,77% до 3 372,76',
+          context: 'Первая сделка дня зафиксировала значение индекса на уровне 3 346,87. \n' +
+            'В ходе торгов максимальное значение индекса составило 3 378,64. \n' +
+            'минимальное – 3 346,87.\n' +
+            '\n' +
+            'Объем сделок с акциями, включенными в представительский список \n' +
+            'Индекса KASE, 18 марта вырос относительно предыдущего торгового дня \n' +
+            'в 6,5 раза и составил 2 952,3 млн тенге (5 833,2 тыс. USD).',
+          timeNews: '18.03.2022'
+        },
+        {
+          id: 2,
+          title: 'Дочерний Банк АО "Сбербанк России" сообщил о понижении агентством Fitch Ratings рейтинговых оценок банка',
+          context: 'Долгосрочный рейтинг дефолта эмитента в иностранной и национальной валютах \n' +
+            'понижен с "BBВ-" до уровня "В+"; краткосрочный рейтинг дефолта эмитента \n' +
+            'в иностранной валюте понижен с "F3" до уровня "В"; национальный долгосрочный \n' +
+            'рейтинг понижен с "AA+(kaz)" до уровня "ВВВ-(kaz)"; рейтинг устойчивости \n' +
+            'понижен с уровня "bb" до "b+"; присвоен рейтинг поддержки акционеров "b-"; \n' +
+            'рейтинг поддержки отозван.',
+          timeNews: '18.03.2022'
+        },
+        {
+          id: 3,
+          title: 'С 10 марта введено в действие дополнение в Положение о маркет-мейкерах',
+          context: 'Дополнением установлено, что в случаях, предусмотренных внутренним \n' +
+            'документом KASE "Правила деятельности маркет-мейкеров", Правление \n' +
+            'KASE вправе принять решение о неприменении к маркет-мейкеру \n' +
+            'соответствующих санкций, в том числе, в случае возникновения \n' +
+            'обстоятельств непреодолимой силы.',
+          timeNews: '14.03.2022'
+        },
+
+      ],
       bigLineChart: {
         allData: [
           [0, 20, 10, 30, 15, 40, 20, 60, 60],
@@ -488,7 +593,7 @@ export default {
       // `index` will be the visible row number (available in the v-model 'shownItems')
       console.log(record); // This will be the item data for the row
       if (record && record.hasOwnProperty('ticker')) {
-        this.selectedStock =  {
+        this.selectedStock = {
           ticker: record.ticker,
           name_ru: record.name_ru
         }
@@ -512,7 +617,7 @@ export default {
         title: this.selectedStock.name_ru
       };
       const pointerToThis = this;
-      console.log(pointerToThis);
+      // console.log(pointerToThis);
       const API_KEY = 'Z0IIDOBOZUY3550O';
       // let StockSymbol = 'FB';
       // let API_Call = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${StockSymbol}&outputsize=compact&apikey=${API_KEY}`;
@@ -549,13 +654,16 @@ export default {
   watch: {
     async selectedInterval(newValue) {
       await this.fetchStock(newValue);
-      console.log(this.stockChartXValues)
-      console.log(this.stockChartYValues)
+      // console.log(this.stockChartXValues)
+      // console.log(this.stockChartYValues)
       this.plotData = [{
         x: this.stockChartXValues,
         y: this.stockChartYValues,
         type: 'scatter'
       }]
+    },
+    async selectedStock(newValue) {
+      this.selectedInterval = '5min';
     }
   }
 };
