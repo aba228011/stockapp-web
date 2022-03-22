@@ -157,7 +157,7 @@
         <h1 style="margin: 10px">Новости</h1>
 
         <b-card-group deck>
-          <b-card header-bg-variant="secondary" bg-variant="dark" text-variant="white"
+          <b-card header-bg-variant="secondary" bg-variant="white" text-variant="white"
                   class="text-center">
             <template #header>
               <b-link href="#" style="font-size: 25px; color: black">
@@ -172,7 +172,7 @@
             </div>
           </b-card>
 
-          <b-card header-bg-variant="secondary" bg-variant="dark" text-variant="white"
+          <b-card header-bg-variant="secondary" bg-variant="white" text-variant="white"
                   class="text-center">
             <template #header>
               <b-link href="#" style="font-size: 25px; color: black">
@@ -186,8 +186,8 @@
               </div>
             </div>
           </b-card>
-
-          <b-card header-bg-variant="secondary" bg-variant="dark" text-variant="white"
+  
+          <b-card header-bg-variant="secondary" bg-variant="white" text-variant="white"
                   class="text-center">
             <template #header>
               <b-link href="#" style="font-size: 25px; color: black">
@@ -661,9 +661,6 @@ export default {
         y: this.stockChartYValues,
         type: 'scatter'
       }]
-    },
-    async selectedStock(newValue) {
-      this.selectedInterval = '5min';
     }
   }
 };
