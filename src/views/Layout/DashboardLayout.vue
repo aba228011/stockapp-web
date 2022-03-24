@@ -120,8 +120,7 @@
                }"></sidebar-item>
         <sidebar-item :link="{
                 name: 'Компаниям',
-                path: '/tables',
-                icon: 'ni ni-building text-blue'
+                path: '/future-listing-about'
                }"></sidebar-item>
         <sidebar-item :link="{
                 name: 'Пользователям рыночной информации',

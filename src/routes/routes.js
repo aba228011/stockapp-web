@@ -46,6 +46,11 @@ const routes = [
         path: '/start-trading',
         name: 'startTrading',
         component: () => import(/* webpackChunkName: "demo" */ '../views/StartTrading.vue')
+      },
+      {
+        path: '/future-listing-about',
+        name: 'futureListingAbout',
+        component: () => import(/* webpackChunkName: "demo" */ '../views/FutureListingAbount.vue')
       }
     ]
   },
