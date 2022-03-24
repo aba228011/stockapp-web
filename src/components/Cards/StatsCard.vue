@@ -31,7 +31,6 @@
 </template>
 <script>
   import Card from './Card.vue';
-  import moment from 'moment-timezone';
 
   export default {
     name: 'stats-card',
@@ -100,15 +99,6 @@
     },
     mounted() {
       this.animate();
-      // const n_y = moment().tz("America/New_York").format();
-      // const hour = n_y.split('T')[1].split('-')[0].split(':')[0];
-      // console.log(hour)
-      // const hour = n_y.split('T')[1].split('-')[0].split(':')[0];
-      // console.log(hour)
-      // const hour = n_y.split('T')[1].split('-')[0].split(':')[0];
-      // console.log(hour)
-      // console.log(moment().tz("America/New_York").format())
-      // console.log(typeof moment().tz("America/New_York").format())
     }
   };
 </script>

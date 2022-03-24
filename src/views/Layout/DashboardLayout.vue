@@ -45,7 +45,7 @@
                }"></sidebar-item>
           <sidebar-item :link="{
                 name: 'Клиринг и расчеты',
-                path: '/tables',
+                path: '/clearing-and-settlement',
                 icon: 'ni ni-bullet-list-67 text-red'
                }"></sidebar-item>
         </sidebar-item>
@@ -171,7 +171,7 @@
           <router-view></router-view>
         </fade-transition>
       </div>
-      <content-footer v-if="!$route.meta.hideFooter"></content-footer>
+<!--      <content-footer v-if="!$route.meta.hideFooter"></content-footer>-->
     </div>
   </div>
 </template>

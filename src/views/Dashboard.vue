@@ -202,7 +202,7 @@
               </div>
             </div>
           </b-card>
-  
+
           <b-card header-bg-variant="secondary" bg-variant="white" text-variant="white"
                   class="text-center">
             <template #header>
@@ -560,6 +560,9 @@ export default {
         y: this.stockChartYValues,
         type: 'scatter'
       }]
+    },
+    async selectedStock(newValue) {
+      this.selectedInterval = '5min';
     }
   }
 };

@@ -38,6 +38,11 @@ const routes = [
         component: () => import(/* webpackChunkName: "demo" */ '../views/RegularTables.vue')
       },
       {
+        path: '/clearing-and-settlement',
+        name: 'clearing',
+        component: () => import(/* webpackChunkName: "demo" */ '../views/Clearing.vue')
+      },
+      {
         path: '/rate',
         name: 'rate',
         component: () => import(/* webpackChunkName: "demo" */ '../views/Rate.vue')
