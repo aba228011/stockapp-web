@@ -5,7 +5,7 @@ import App from './App.vue';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import store from "@/services/store";
+import store from "@/store/store";
 
 // router setup
 import router from './routes/router';
