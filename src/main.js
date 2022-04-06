@@ -2,10 +2,11 @@ import Vue from 'vue';
 import DashboardPlugin from './plugins/dashboard-plugin';
 import App from './App.vue';
 
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import {BootstrapVue, IconsPlugin} from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import store from "@/store/store";
+import Vuelidate from 'vuelidate'
 
 // router setup
 import router from './routes/router';
@@ -13,6 +14,7 @@ import router from './routes/router';
 Vue.use(DashboardPlugin);
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
+Vue.use(Vuelidate);
 
 /* eslint-disable no-new */
 new Vue({

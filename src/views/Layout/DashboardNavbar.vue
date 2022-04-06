@@ -29,7 +29,9 @@
           </b-input-group>
         </b-form-group>
       </b-form>
-      <base-dropdown menu-on-right
+      <base-dropdown
+                     v-if="$store.state.auth.status.loggedIn"
+                     menu-on-right
                      class="nav-item"
                      tag="li"
                      title-tag="a"
@@ -67,13 +69,44 @@
             <span>Support</span>
           </b-dropdown-item>
           <div class="dropdown-divider"></div>
-          <b-dropdown-item href="#!">
+          <b-dropdown-item @click="onLogout">
             <i class="ni ni-user-run"></i>
             <span>Logout</span>
           </b-dropdown-item>
 
         </template>
       </base-dropdown>
+      <base-dropdown
+                     v-if="!$store.state.auth.status.loggedIn"
+                     menu-on-right
+                     class="nav-item"
+                     tag="li"
+                     title-tag="a"
+                     title-classes="nav-link pr-0">
+        <a href="#" class="nav-link pr-0" @click.prevent slot="title-container">
+          <b-media no-body class="align-items-center">
+                  <span class="avatar avatar-sm rounded-circle">
+                    <img alt="Image placeholder" src="img/theme/team-4.jpg">
+                  </span>
+            <b-media-body class="ml-2 d-none d-lg-block">
+              <span class="mb-0 text-sm  font-weight-bold">Войти</span>
+            </b-media-body>
+          </b-media>
+        </a>
+
+        <template>
+          <b-dropdown-item @click="$router.push('/login');">
+            <i class="ni ni-user-run"></i>
+            <span>Войти</span>
+          </b-dropdown-item>
+          <b-dropdown-item @click="$router.push('/register');">
+            <i class="ni ni-user-run"></i>
+            <span>Зарегистрироваться</span>
+          </b-dropdown-item>
+
+        </template>
+      </base-dropdown>
+
     </b-navbar-nav>
   </base-nav>
 </template>
@@ -117,6 +150,13 @@ export default {
     },
     closeDropDown() {
       this.activeNotifications = false;
+    },
+    onLogout() {
+      try {
+        this.$store.dispatch('auth/logout');
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 };
