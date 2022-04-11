@@ -185,7 +185,16 @@ export default {
           }
         );
       }
-    }
+    },
+    makeToast(variant, title, tostbody) {
+      this.$bvToast.toast(tostbody, {
+        title: title,
+        variant: variant,
+        toaster: 'b-toaster-top-center',
+        autoHideDelay: 5000,
+        appendToast: true
+      });
+    } // сообщение
   }
 };
 </script>

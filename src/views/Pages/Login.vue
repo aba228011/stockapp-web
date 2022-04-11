@@ -165,7 +165,7 @@ export default {
         autoHideDelay: 5000,
         appendToast: true
       });
-    }, // сообщение
+    } // сообщение
   }
 };
 </script>
