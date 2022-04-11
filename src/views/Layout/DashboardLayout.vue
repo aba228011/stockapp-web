@@ -18,11 +18,11 @@
               }"></sidebar-item>
           <sidebar-item :link="{
                 name: 'Акции',
-                path: '/icons'
+                path: '/'
               }"></sidebar-item>
           <sidebar-item :link="{
                 name: 'Список инструментов',
-                path: '/maps'
+                path: '/'
               }"></sidebar-item>
           <!--          <sidebar-item :link="{-->
           <!--                name: 'User Profile',-->
@@ -35,12 +35,12 @@
           <!--               }"></sidebar-item>-->
           <sidebar-item :link="{
                 name: 'Просмотр торгов',
-                path: '/tables',
+                path: '/',
                 icon: 'ni ni-bullet-list-67 text-red'
                }"></sidebar-item>
           <sidebar-item :link="{
                 name: 'Регламент торгов и клиринга',
-                path: '/tables',
+                path: '/',
                 icon: 'ni ni-bullet-list-67 text-red'
                }"></sidebar-item>
           <sidebar-item :link="{
@@ -56,19 +56,19 @@
         }">
           <sidebar-item :link="{
                 name: 'Листинг',
-                path: '/a'
+                path: '/'
               }"></sidebar-item>
           <sidebar-item :link="{
                 name: 'Список компаний',
-                path: '/b'
+                path: '/'
               }"></sidebar-item>
           <sidebar-item :link="{
                 name: 'Рэнкинг активности',
-                path: '/c'
+                path: '/'
               }"></sidebar-item>
           <sidebar-item :link="{
                 name: 'Клиринговые участники',
-                path: '/d'
+                path: '/'
               }"></sidebar-item>
         </sidebar-item>
 
@@ -78,15 +78,15 @@
         }">
           <sidebar-item :link="{
                 name: 'Правила платформы',
-                path: '/a'
+                path: '/'
               }"></sidebar-item>
           <sidebar-item :link="{
                 name: 'Законадательство',
-                path: '/b'
+                path: '/'
               }"></sidebar-item>
           <sidebar-item :link="{
                 name: 'Дополнительные материалы',
-                path: '/c'
+                path: '/'
               }"></sidebar-item>
         </sidebar-item>
 
@@ -96,26 +96,26 @@
         }">
           <sidebar-item :link="{
                 name: 'Все новости',
-                path: '/a'
+                path: '/'
               }"></sidebar-item>
           <sidebar-item :link="{
                 name: 'Новости рынков',
-                path: '/b'
+                path: '/'
               }"></sidebar-item>
           <sidebar-item :link="{
                 name: 'Новости биржы',
-                path: '/c'
+                path: '/'
               }"></sidebar-item>
         </sidebar-item>
 
         <sidebar-item :link="{
                 name: 'Брокерам и дилерам',
-                path: '/tables',
+                path: '/',
                 icon: 'ni ni-active-40 text-green'
                }"></sidebar-item>
         <sidebar-item :link="{
                 name: 'Инвесторам',
-                path: '/tables',
+                path: '/',
                 icon: 'ni ni-bullet-list-67 text-red'
                }"></sidebar-item>
         <sidebar-item :link="{
@@ -124,7 +124,7 @@
                }"></sidebar-item>
         <sidebar-item :link="{
                 name: 'Пользователям рыночной информации',
-                path: '/tables',
+                path: '/',
                 icon: 'ni ni-single-02'
                }"></sidebar-item>
 
