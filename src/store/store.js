@@ -11,13 +11,13 @@ const store = new Vuex.Store({
 });
 export default store;
 
-// метод для обновления данных текущего пользователя по таймеру (раз в 1 minute)
-const updateUserInfo = () => {
-  store.dispatch('auth.updateUserInfo');
-  console.log('hei hei hie')
-  setTimeout(updateUserInfo, 60000);
-};
-
-setTimeout(() => {
-  updateUserInfo();
-});
+// // метод для обновления данных текущего пользователя по таймеру (раз в 1 minute)
+// const updateUserInfo = () => {
+//   store.dispatch('auth.updateUserInfo');
+//   console.log('hei hei hie')
+//   setTimeout(updateUserInfo, 60000);
+// };
+//
+// setTimeout(() => {
+//   updateUserInfo();
+// });

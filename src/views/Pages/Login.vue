@@ -25,7 +25,7 @@
       <b-row class="justify-content-center">
         <b-col lg="5" md="7">
           <b-card no-body class="bg-secondary border-0 mb-0">
-            <b-card-header class="bg-transparent pb-5"  >
+            <b-card-header class="bg-transparent pb-5">
               <div class="text-muted text-center mt-2 mb-3"><small>Sign in with</small></div>
               <div class="btn-wrapper text-center">
                 <a href="#" class="btn btn-neutral btn-icon">
@@ -44,38 +44,60 @@
               </div>
               <validation-observer v-slot="{handleSubmit}" ref="formValidator">
                 <b-form role="form" @submit.prevent="handleSubmit(onSubmit)">
-                  <base-input alternative
-                              class="mb-3"
-                              name="Email"
-                              :rules="{required: true, email: true}"
-                              prepend-icon="ni ni-email-83"
-                              placeholder="Email"
-                              v-model="model.email">
-                  </base-input>
+                  <div class="form-group" :class="{ 'form-group--error': $v.user.email.$error }">
+                    <base-input alternative
+                                class="mb-3"
+                                prepend-icon="ni ni-email-83"
+                                placeholder="Email"
+                                name="Email"
+                                v-model="user.email">
+                    </base-input>
+                  </div>
+                  <div class="error" v-if="!$v.user.email.required">Email is required.</div>
+                  <div class="error" v-if="!$v.user.email.email">This is email</div>
 
-                  <base-input alternative
-                              class="mb-3"
-                              name="Password"
-                              :rules="{required: true, min: 6}"
-                              prepend-icon="ni ni-lock-circle-open"
-                              type="password"
-                              placeholder="Password"
-                              v-model="model.password">
-                  </base-input>
+                  <div class="form-group" :class="{ 'form-group--error': $v.user.password.$error }">
+                    <base-input alternative
+                                class="mb-3"
+                                prepend-icon="ni ni-lock-circle-open"
+                                placeholder="password"
+                                type="password"
+                                name="Password"
+                                v-model="user.password">
+                    </base-input>
+                  </div>
+                  <div class="error" v-if="!$v.user.password.required">Password is required.</div>
+                  <div class="error" v-if="!$v.user.password.minLength">Password must have at least
+                    {{ $v.user.password.$params.minLength.min }} letters.
+                  </div>
+                  <div class="error" v-if="!$v.user.password.maxLength">Password less have at least
+                    {{ $v.user.password.$params.maxLength.max }} letters.
+                  </div>
 
-                  <b-form-checkbox v-model="model.rememberMe">Remember me</b-form-checkbox>
+                  <b-form-checkbox v-model="rememberMe">Remember me</b-form-checkbox>
                   <div class="text-center">
-                    <base-button type="primary" native-type="submit" class="my-4">Sign in</base-button>
+                    <base-button type="primary" native-type="submit" class="my-4">
+                      <span v-if="submitted">
+                        <b-spinner small type="grow"></b-spinner>
+                        Loading...
+                      </span>
+                      <span v-else>
+                        Sign in
+                      </span>
+                    </base-button>
                   </div>
                 </b-form>
               </validation-observer>
             </b-card-body>
           </b-card>
           <b-row class="mt-3">
-            <b-col cols="6">
+            <b-col cols="4">
               <router-link to="/dashboard" class="text-light"><small>Forgot password?</small></router-link>
             </b-col>
-            <b-col cols="6" class="text-right">
+            <b-col cols="4">
+              <router-link to="/register" class="text-light"><small>Sign up</small></router-link>
+            </b-col>
+            <b-col cols="4" class="text-right">
               <router-link to="/register" class="text-light"><small>Create new account</small></router-link>
             </b-col>
           </b-row>
@@ -85,20 +107,70 @@
   </div>
 </template>
 <script>
-  export default {
-    data() {
-      return {
-        model: {
-          email: '',
-          password: '',
-          rememberMe: false
-        }
-      };
-    },
-    methods: {
-      onSubmit() {
-        // this will be called only after form is valid. You can do api call here to login
+import User from "@/models/user";
+import {email, maxLength, minLength, required} from "vuelidate/lib/validators";
+
+export default {
+  data() {
+    return {
+      user: new User('', '', ''),
+      rememberMe: false,
+      submitted: false
+    };
+  },
+  validations: {
+    user: {
+      email: {
+        required,
+        email
+      },
+      password: {
+        required,
+        minLength: minLength(6),
+        maxLength: maxLength(20)
       }
     }
-  };
+  },
+  computed: {
+    loggedIn() {
+      return this.$store.state.auth.status.loggedIn;
+    }
+  },
+  created() {
+    if (this.loggedIn) {
+      this.$router.push('/dashboard');
+    }
+  },
+  methods: {
+    async onSubmit() {
+      if (!this.$v.$invalid) {
+        this.submitted = true;
+        await this.$store.dispatch('auth/login', this.user).then(
+          () => {
+            this.$router.push('/dashboard');
+            this.submitted = false;
+          },
+          error => {
+            this.makeToast('danger', 'Ошибка запроса auth/login', error.toString());
+            this.submitted = false;
+          }
+        );
+      }
+    },
+    makeToast(variant, title, tostbody) {
+      this.$bvToast.toast(tostbody, {
+        title: title,
+        variant: variant,
+        toaster: 'b-toaster-top-center',
+        autoHideDelay: 5000,
+        appendToast: true
+      });
+    }, // сообщение
+  }
+};
 </script>
+<style scoped>
+.error {
+  color: red;
+}
+</style>

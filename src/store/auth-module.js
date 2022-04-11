@@ -8,8 +8,8 @@ export const auth = {
   namespaced: true,
   state: initialState,
   actions: {
-    login({ commit }, user) {
-      return AuthService.login(user).then(
+    async login({ commit }, user) {
+      return await AuthService.login(user).then(
         user => {
           commit('loginSuccess', user);
           return Promise.resolve(user);
@@ -24,8 +24,8 @@ export const auth = {
       AuthService.logout();
       commit('logout');
     },
-    register({ commit }, user) {
-      return AuthService.register(user).then(
+    async register({ commit }, user) {
+      return await AuthService.register(user).then(
         response => {
           commit('registerSuccess');
           return Promise.resolve(response.data);
@@ -36,11 +36,6 @@ export const auth = {
         }
       );
     },
-    updateUserInfo ({ commit }) {
-      // Обновление пользователя
-      // const newU = null // request
-      // commit('applyNewUserInfo', newU);
-    }
   },
   mutations: {
     loginSuccess(state, user) {
@@ -56,23 +51,12 @@ export const auth = {
       state.user = null;
     },
     registerSuccess(state) {
-      state.status.loggedIn = false;
+      state.status.loggedIn = true;
+      state.user = user;
     },
     registerFailure(state) {
       state.status.loggedIn = false;
-    },
-    applyNewUserInfo(state, info) {
-      // Очистка или обновление:
-      //   логина
-      //   роли
-      //   признака "пользователь авторизован"
-      if (info === undefined) {
-        state.status.loggedIn = false;
-        state.user = null;
-      } else {
-        state.status.loggedIn = true;
-        state.user = info.user;
-      }
+      state.user = null;
     }
   }
 };

@@ -24,7 +24,7 @@
     <b-container class="mt--8 pb-5">
       <!-- Table -->
       <b-row class="justify-content-center">
-        <b-col lg="6" md="8" >
+        <b-col lg="6" md="8">
           <b-card no-body class="bg-secondary border-0">
             <b-card-header class="bg-transparent pb-5">
               <div class="text-muted text-center mt-2 mb-4"><small>Sign up with</small></div>
@@ -45,51 +45,81 @@
               </div>
               <validation-observer v-slot="{handleSubmit}" ref="formValidator">
                 <b-form role="form" @submit.prevent="handleSubmit(onSubmit)">
-                  <base-input alternative
-                              class="mb-3"
-                              prepend-icon="ni ni-hat-3"
-                              placeholder="Name"
-                              name="Name"
-                              :rules="{required: true}"
-                              v-model="model.name">
-                  </base-input>
+                  <div class="form-group" :class="{ 'form-group--error': $v.user.username.$error }">
+                    <base-input alternative
+                                class="mb-3"
+                                prepend-icon="ni ni-hat-3"
+                                placeholder="Name"
+                                name="Name"
+                                v-model="user.username">
+                    </base-input>
+                  </div>
+                  <div class="error" v-if="!$v.user.username.required">Username is required.</div>
+                  <div class="error" v-if="!$v.user.username.minLength">Username must have at least
+                    {{ $v.user.password.$params.minLength.min }} letters.
+                  </div>
 
-                  <base-input alternative
-                              class="mb-3"
-                              prepend-icon="ni ni-email-83"
-                              placeholder="Email"
-                              name="Email"
-                              :rules="{required: true, email: true}"
-                              v-model="model.email">
-                  </base-input>
+                  <div class="form-group" :class="{ 'form-group--error': $v.user.email.$error }">
+                    <base-input alternative
+                                class="mb-3"
+                                prepend-icon="ni ni-email-83"
+                                placeholder="Email"
+                                name="Email"
+                                v-model="user.email">
+                    </base-input>
+                  </div>
+                  <div class="error" v-if="!$v.user.email.required">Email is required.</div>
+                  <div class="error" v-if="!$v.user.email.email">This is email</div>
 
-                  <base-input alternative
-                              class="mb-3"
-                              prepend-icon="ni ni-lock-circle-open"
-                              placeholder="password"
-                              type="password"
-                              name="Password"
-                              :rules="{required: true, min: 6}"
-                              v-model="model.password">
-                  </base-input>
-                  <div class="text-muted font-italic"><small>password strength: <span
-                    class="text-success font-weight-700">strong</span></small></div>
+                  <div class="form-group" :class="{ 'form-group--error': $v.user.password.$error }">
+                    <base-input alternative
+                                class="mb-3"
+                                prepend-icon="ni ni-lock-circle-open"
+                                placeholder="password"
+                                type="password"
+                                name="Password"
+                                v-model="user.password">
+                    </base-input>
+                  </div>
+                  <div class="error" v-if="!$v.user.password.required">Password is required.</div>
+                  <div class="error" v-if="!$v.user.password.minLength">Password must have at least
+                    {{ $v.user.password.$params.minLength.min }} letters.
+                  </div>
+                  <div class="error" v-if="!$v.user.password.maxLength">Password less have at least
+                    {{ $v.user.password.$params.maxLength.max }} letters.
+                  </div>
+
                   <b-row class=" my-4">
                     <b-col cols="12">
                       <base-input :rules="{ required: { allowFalse: false } }" name=Privacy Policy>
-                        <b-form-checkbox v-model="model.agree">
+                        <b-form-checkbox v-model="agree">
                           <span class="text-muted">I agree with the <a href="#!">Privacy Policy</a></span>
                         </b-form-checkbox>
                       </base-input>
                     </b-col>
                   </b-row>
                   <div class="text-center">
-                    <b-button type="submit" variant="primary" class="mt-4">Create account</b-button>
+                    <b-button type="submit" variant="primary" class="mt-4">
+                      <span v-if="submitted">
+                        <b-spinner small type="grow"></b-spinner>
+                        Loading...
+                      </span>
+                      <span v-else>
+                        Create account
+                      </span>
+                    </b-button>
                   </div>
                 </b-form>
               </validation-observer>
             </b-card-body>
           </b-card>
+          <b-row class="mt-3">
+
+            <b-col cols="4">
+              <router-link to="/login" class="text-light"><small>Sign in</small></router-link>
+            </b-col>
+
+          </b-row>
         </b-col>
       </b-row>
     </b-container>
@@ -97,24 +127,70 @@
 </template>
 <script>
 
-  export default {
-    name: 'register',
-    data() {
-      return {
-        model: {
-          name: '',
-          email: '',
-          password: '',
-          agree: false
-        }
-      }
-    },
-    methods: {
-      onSubmit() {
-        // this will be called only after form is valid. You can do an api call here to register users
+import User from "@/models/user";
+import {required, email, minLength, maxLength} from "vuelidate/lib/validators";
+
+export default {
+  name: 'register',
+  data() {
+    return {
+      user: new User('', '', ''),
+      submitted: false,
+      successful: false,
+      message: '',
+      agree: false
+    }
+  },
+  validations: {
+    user: {
+      username: {
+        required,
+        minLength: minLength(6)
+      },
+      email: {
+        required,
+        email
+      },
+      password: {
+        required,
+        minLength: minLength(6),
+        maxLength: maxLength(20)
       }
     }
-
-  };
+  },
+  computed: {
+    loggedIn() {
+      return this.$store.state.auth.status.loggedIn;
+    }
+  },
+  mounted() {
+    if (this.loggedIn) {
+      this.$router.push('/dashboard');
+    }
+  },
+  methods: {
+    async onSubmit() {
+      if (!this.$v.$invalid) {
+        this.submitted = true;
+        await this.$store.dispatch('auth/register', this.user).then(
+          () => {
+            this.$router.push('/dashboard');
+            this.successful = true;
+            this.submitted = false;
+          },
+          error => {
+            this.makeToast('danger', 'Ошибка запроса auth/register', error.toString());
+            this.successful = false;
+            this.submitted = false;
+          }
+        );
+      }
+    }
+  }
+};
 </script>
-<style></style>
+<style scoped>
+.error {
+  color: red;
+}
+</style>
